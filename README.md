@@ -1,7 +1,7 @@
 # ORM Doctrine Criteria
 
 This library is meant to ease the filtering with Doctrine repositories.
-It's an ideal companion for (PUGX FilterBundle)[1]
+It's an ideal companion for [PUGX FilterBundle][1].
 
 ## Setup
 
@@ -13,14 +13,14 @@ The basic idea of this library is applying the Open/Closed principle
 (the "O" in SOLID), to avoid being forced to change your code every
 time you need to apply a new filter.
 
-> *TIP* for the concept of "filter", refer to the FilterBundle mentioned above
+> 💡 **TIP** for the concept of "filter", refer to the FilterBundle mentioned above
 
-You have two classes available: AbstractCriterion and Filterer.
-Inject Filterer into your repositories, then you can start creating
+You have two classes available: `AbstractCriterion` and `Filterer`.
+Inject the latter into your repositories, then you can start creating
 your criteria.
 
-Let's suppose you have a UserRepository, and you want to filter your users by
-the following fields: username, enabled (yes/no), country.
+Let's suppose you have a `UserRepository`, and you want to filter your users by
+the following fields: "username", "enabled" (yes/no), and "country".
 
 Let's create the following classes:
 
@@ -123,7 +123,7 @@ readonly class UserRepository
     {
         $builder = $this->manager
             ->createQueryBuilder()
-            ->from(User::class, 'u');
+            ->from(User::class, 'u')
             ->select('u')
         ;
 
@@ -140,6 +140,7 @@ readonly class UserRepository
 You can pass your sorting options along wit the filters, like in this example:
 
 `$filters['_sort']['field'] = 'username';`
+
 `$filters['_sort']['direction'] = 'DESC';`
 
 If your criterion needs something more sophisticated than the basic operators,
@@ -178,4 +179,4 @@ filtered field: for example, in the code above, the filterd field `username` exp
 a db field `u.username`.
 If it's not the case, you can defined a static property `$dbField` in your criterion class.
 
-[1] https://github.com/PUGX/filter-bundle
+[1]: https://github.com/PUGX/filter-bundle
