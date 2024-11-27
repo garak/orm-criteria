@@ -41,7 +41,7 @@ final class Filterer
         }
 
         if (isset($filters['_sort']['field'])) {
-            $builder->orderBy($alias.'.'.$filters['_sort']['field'], $filters['_sort']['direction']);
+            $builder->orderBy($alias.'.'.$filters['_sort']['field'], $filters['_sort']['direction'] ?? 'ASC');
         } else {
             if (empty($defaultSort)) {
                 $defaultSort = 'id';
