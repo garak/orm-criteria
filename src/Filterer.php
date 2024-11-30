@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 final class Filterer
 {
     /**
-     * @param iterable<\Garak\OrmCriteria\AbstractCriterion> $criteria
+     * @param iterable<AbstractCriterion> $criteria
      */
     public function __construct(protected readonly iterable $criteria)
     {
