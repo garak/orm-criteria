@@ -2,17 +2,25 @@
 
 namespace Garak\OrmCriteria;
 
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
 abstract class AbstractCriterion
 {
     // available QueryBuilder comparison methods
-    protected const string EQ = 'eq';
-    protected const string LIKE = 'like';
-    protected const string GT = 'gt';
-    protected const string GTE = 'gte';
-    protected const string LT = 'lt';
-    protected const string LTE = 'lte';
+    protected const string EQ = Comparison::EQ;
+    protected const string CONTAINS = Comparison::CONTAINS;
+    protected const string LIKE = Comparison::CONTAINS; // backward compatible alias
+    protected const string GT = Comparison::GT;
+    protected const string GTE = Comparison::GTE;
+    protected const string LT = Comparison::LT;
+    protected const string LTE = Comparison::LTE;
+    protected const string NEQ = Comparison::NEQ;
+    protected const string IN = Comparison::IN;
+    protected const string NIN = Comparison::NIN;
+    protected const string STARTS_WITH = Comparison::STARTS_WITH;
+    protected const string ENDS_WITH = Comparison::ENDS_WITH;
+    protected const string MEMBER_OF = Comparison::MEMBER_OF;
 
     // mandatory to redefine this property in child class, to match the entity class
     protected static string $entityName = '';
@@ -24,6 +32,10 @@ abstract class AbstractCriterion
 
     public function apply(QueryBuilder $builder, mixed $value, string $alias): void
     {
+        if (empty(static::$entityName) || empty(static::$field)) {
+            throw new \LogicException('Mandatory property not defined in '.static::class);
+        }
+
         // if you define a static function named "filter", it will be used instead of comparison
         if (\method_exists(static::class, 'filter')) {
             static::filter($builder, $value, $alias);
@@ -36,7 +48,7 @@ abstract class AbstractCriterion
         $dbField = self::getDbField($alias);
         $builder
             ->andWhere($builder->expr()->$method($dbField, ':'.$param))
-            ->setParameter($param, self::LIKE === static::$compare ? '%'.$value.'%' : $value)
+            ->setParameter($param, self::fixValue($value))
         ;
     }
 
@@ -55,5 +67,15 @@ abstract class AbstractCriterion
         }
 
         return $alias.'.'.static::$field;
+    }
+
+    private static function fixValue(mixed $value): mixed
+    {
+        return match (static::$compare) {
+            self::CONTAINS => '%'.$value.'%',
+            self::STARTS_WITH => $value.'%',
+            self::ENDS_WITH => '%'.$value,
+            default => $value,
+        };
     }
 }
