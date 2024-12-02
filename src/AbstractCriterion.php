@@ -43,7 +43,7 @@ abstract class AbstractCriterion
             return;
         }
 
-        $method = static::$compare;
+        $method = self::getExprMethod(static::$compare);
         $param = 'p_'.static::$field;
         $dbField = self::getDbField($alias);
         $builder
@@ -67,6 +67,23 @@ abstract class AbstractCriterion
         }
 
         return $alias.'.'.static::$field;
+    }
+
+    private static function getExprMethod(string $comparison): string
+    {
+        return match ($comparison) {
+            self::EQ => 'eq',
+            self::CONTAINS, self::LIKE, self::STARTS_WITH, self::ENDS_WITH => 'like',
+            self::GT => 'gt',
+            self::GTE => 'gte',
+            self::LT => 'lt',
+            self::LTE => 'lte',
+            self::NEQ => 'neq',
+            self::IN => 'in',
+            self::NIN => 'notIn',
+            self::MEMBER_OF => 'isMemberOf',
+            default => throw new \InvalidArgumentException('Invalid comparison method: '.$comparison),
+        };
     }
 
     private static function fixValue(mixed $value): mixed
