@@ -13,7 +13,8 @@ The basic idea of this library is applying the Open/Closed principle
 (the "O" in SOLID), to avoid being forced to change your code every
 time you need to apply a new filter.
 
-> 💡 **TIP** for the concept of "filter", refer to the FilterBundle mentioned above
+> [!TIP]
+> for the concept of "filter", refer to the FilterBundle mentioned above
 
 You have two classes available: `AbstractCriterion` and `Filterer`.
 Inject the latter into your repositories, then you can start creating
