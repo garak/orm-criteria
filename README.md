@@ -9,7 +9,7 @@ Run `composer require garak/orm-criteria`. No configuration is required.
 
 ## Usage
 
-The basic idea of this library is applying the Open/Closed principle
+The basic idea of this library is to apply the Open/Closed principle
 (the "O" in SOLID), to avoid being forced to change your code every
 time you need to apply a new filter.
 
@@ -87,7 +87,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    # feel fre to use the tag name your prefer
+    # feel free to use the tag name you prefer
     _instanceof:
         Garak\OrmCriteria\AbstractCriterion:
             tags: ['garak.criterion']
@@ -175,9 +175,9 @@ final class UnchartedUserCriterion extends AbstractCriterion
 You can use different kinds of comparison operators, see the constants defined in 
 the `Filterer` class.
 
-By default, the library expects to find a database name matching the name of the
-filtered field: for example, in the code above, the filterd field `username` expects
+By default, the library expects to find a database field matching the name of the
+filtered field: for example, in the code above, the filtered field `username` expects
 a db field `u.username`.
-If it's not the case, you can defined a static property `$dbField` in your criterion class.
+If it's not the case, you can define a static property `$dbField` in your criterion class.
 
 [1]: https://github.com/PUGX/filter-bundle
