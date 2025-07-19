@@ -6,6 +6,8 @@ use Doctrine\ORM\QueryBuilder;
 
 final class Filterer
 {
+    public static $appliedCriteria = [];
+
     /**
      * @param iterable<AbstractCriterion> $criteria
      */
@@ -36,6 +38,7 @@ final class Filterer
             foreach ($this->criteria as $criterion) {
                 if ($criterion->supports($class, $name)) {
                     $criterion->apply($builder, $value, $alias);
+                    self::$appliedCriteria[$name] = $criterion;
                 }
             }
         }
