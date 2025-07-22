@@ -5,7 +5,20 @@ It's an ideal companion for [PUGX FilterBundle][1].
 
 ## Setup
 
-Run `composer require garak/orm-criteria`. No configuration is required.
+Run `composer require garak/orm-criteria`.
+
+If you want to leverage the profiler info, you need to add the bundle to
+your kernel. You won't need to enable the bundle in other environments,
+its features will work anyway.
+
+```php
+<?php
+
+return [
+    // your other bundles...
+    Garak\OrmCriteria\GarakOrmCriteriaBundle::class => ['dev' => true],
+];
+```
 
 ## Usage
 
