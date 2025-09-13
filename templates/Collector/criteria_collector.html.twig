@@ -42,13 +42,15 @@ https://github.com/tabler/tabler-icons/blob/master/LICENSE
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Criterion</th>
+                    <th scope="col">Value</th>
                 </tr>
             </thead>
             <tbody>
                 {% for name, criterion in collector.criteria %}
                     <tr>
                         <td>{{ name }}</td>
-                        <td>{{ dump(criterion) }}</td>
+                        <td>{{ dump(criterion.0) }}</td>
+                        <td>{{ dump(criterion.1) }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

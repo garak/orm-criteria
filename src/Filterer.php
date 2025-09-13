@@ -38,7 +38,7 @@ final class Filterer
             foreach ($this->criteria as $criterion) {
                 if ($criterion->supports($class, $name)) {
                     $criterion->apply($builder, $value, $alias);
-                    self::$appliedCriteria[$name] = $criterion;
+                    self::$appliedCriteria[$name] = [$criterion, $value];
                 }
             }
         }
