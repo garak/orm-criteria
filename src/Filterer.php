@@ -44,7 +44,8 @@ final class Filterer
         }
 
         if (isset($filters['_sort']['field'])) {
-            $builder->orderBy($alias.'.'.$filters['_sort']['field'], $filters['_sort']['direction'] ?? 'ASC');
+            $sortField = str_contains($filters['_sort']['field'], '.') ? $filters['_sort']['field'] : $alias.'.'.$filters['_sort']['field'];
+            $builder->orderBy($sortField, $filters['_sort']['direction'] ?? 'ASC');
         } elseif ([] === $builder->getDQLPart('orderBy')) {
             if (empty($defaultSort)) {
                 $defaultSort = 'id';
