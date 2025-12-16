@@ -10,6 +10,6 @@ final class GarakOrmCriteriaBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $container->import('../config/collector.xml');
+        $container->import('../config/collector.php');
     }
 }
