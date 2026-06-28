@@ -6,12 +6,15 @@ use Doctrine\ORM\QueryBuilder;
 use Garak\OrmCriteria\AbstractCriterion;
 use Garak\OrmCriteria\Filterer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class FiltererTest extends TestCase
 {
-    public function testFilter(): void
+    #[Test]
+    #[DataProvider('criteriaProvider')
+    public function filter(array $criteria): void
     {
-        $criteria = self::criteriaProvider();
         $filterer = new Filterer($criteria);
 
         $builder = $this->createMock(QueryBuilder::class);
