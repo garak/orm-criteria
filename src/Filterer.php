@@ -25,7 +25,7 @@ final class Filterer
         QueryBuilder $builder,
         ?string $alias = null,
         ?string $defaultSort = null,
-        ?string $defaultDirection = null,
+        \SortDirection|string|null $defaultDirection = null,
     ): void {
         if (null == $alias) {
             $alias = $builder->getRootAliases()[0];
@@ -45,12 +45,29 @@ final class Filterer
 
         if (isset($filters['_sort']['field'])) {
             $sortField = str_contains($filters['_sort']['field'], '.') ? $filters['_sort']['field'] : $alias.'.'.$filters['_sort']['field'];
-            $builder->orderBy($sortField, $filters['_sort']['direction'] ?? 'ASC');
+            $builder->orderBy($sortField, self::direction($filters['_sort']['direction'] ?? null));
         } elseif ([] === $builder->getDQLPart('orderBy')) {
             if (empty($defaultSort)) {
                 $defaultSort = 'id';
             }
-            $builder->orderBy($alias.'.'.$defaultSort, $defaultDirection ?? 'ASC');
+            $builder->orderBy($alias.'.'.$defaultSort, self::direction($defaultDirection));
         }
+    }
+
+    /**
+     * Doctrine 3.7 deprecates string directions in the query builder, so Doctrine only ever
+     * gets the enum. Strings stay welcome here, as in Doctrine's own findBy(): a sort usually
+     * comes from a request, and the enum has no backing value to parse it from. Anything that
+     * is not "DESC" (case-insensitive) sorts ascending, so no arbitrary input reaches the DQL.
+     */
+    private static function direction(mixed $direction): \SortDirection
+    {
+        if ($direction instanceof \SortDirection) {
+            return $direction;
+        }
+
+        return \is_string($direction) && 'DESC' === \strtoupper($direction)
+            ? \SortDirection::Descending
+            : \SortDirection::Ascending;
     }
 }

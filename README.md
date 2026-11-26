@@ -7,6 +7,16 @@ It's an ideal companion for [PUGX FilterBundle][1].
 
 Run `composer require garak/orm-criteria`.
 
+The library uses PHP 8.6's `\SortDirection` enum, provided on older versions by
+`symfony/polyfill-php86`. If your project already requires PHP 8.6 or later, the polyfill does
+nothing, and you can keep it out of your `vendor` by replacing it in your own `composer.json`:
+
+```json
+"replace": {
+    "symfony/polyfill-php86": "*"
+}
+```
+
 If you want to leverage the profiler info, you need to add the bundle to
 your kernel. You won't need to enable the bundle in other environments,
 its features will work anyway.
@@ -151,11 +161,22 @@ readonly class UserRepository
 
 ## Advanced Usage
 
-You can pass your sorting options along wit the filters, like in this example:
+You can pass your sorting options along with the filters, like in this example:
 
 `$filters['_sort']['field'] = 'username';`
 
-`$filters['_sort']['direction'] = 'DESC';`
+`$filters['_sort']['direction'] = \SortDirection::Descending;`
+
+The same goes for the `defaultDirection` argument of `filter()`:
+
+```php
+$this->filterer->filter(User::class, $filters, $builder, defaultSort: 'created', defaultDirection: \SortDirection::Descending);
+```
+
+Both places also accept a string, like `'DESC'`, which is what you get when the direction comes
+straight from a request. Strings are matched case-insensitively: `'DESC'` sorts descending and
+anything else sorts ascending, so no arbitrary value reaches the query. Either way, Doctrine
+receives a `\SortDirection`, so ORM 3.7+ triggers no deprecation.
 
 If your criterion needs something more sophisticated than the basic operators,
 you can define a `filter` method and add your logic. Example:

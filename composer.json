@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "^8.4",
-        "doctrine/orm": "^3.0"
+        "doctrine/orm": "^3.7",
+        "symfony/polyfill-php86": "^1.37"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.5"
